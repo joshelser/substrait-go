@@ -10,6 +10,7 @@ import (
 	"path"
 	"sort"
 	"sync"
+	"time"
 
 	"github.com/creasty/defaults"
 	"github.com/goccy/go-yaml"
@@ -53,10 +54,12 @@ func loadDefaultCollection() (*Collection, error) {
 
 	var defaultCollection Collection
 	for _, ent := range entries {
+		start := time.Now()
 		err2 := loadExtensionFile(&defaultCollection, substraitFS, ent)
 		if err2 != nil {
 			return nil, err2
 		}
+		fmt.Printf("time to load %s, %v\n", ent.Name(), time.Since(start))
 	}
 	return &defaultCollection, nil
 }
