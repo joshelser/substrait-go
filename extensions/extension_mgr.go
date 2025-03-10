@@ -54,17 +54,16 @@ func loadDefaultCollection() (*Collection, error) {
 
 	var defaultCollection Collection
 	for _, ent := range entries {
-		start := time.Now()
 		err2 := loadExtensionFile(&defaultCollection, substraitFS, ent)
 		if err2 != nil {
 			return nil, err2
 		}
-		fmt.Printf("time to load %s, %v\n", ent.Name(), time.Since(start))
 	}
 	return &defaultCollection, nil
 }
 
 func loadExtensionFile(collection *Collection, substraitFS embed.FS, ent fs.DirEntry) error {
+	start := time.Now()
 	f, err := substraitFS.Open(path.Join("extensions/", ent.Name()))
 	if err != nil {
 		return err
@@ -77,11 +76,14 @@ func loadExtensionFile(collection *Collection, substraitFS embed.FS, ent fs.DirE
 		return err
 	}
 	fileName := path.Base(fileStat.Name())
+	fmt.Printf("time to open %s, %v\n", ent.Name(), time.Since(start))
 	if _, ok := unsupportedExtensions[fileName]; !ok {
+		start = time.Now()
 		err = collection.Load(SubstraitDefaultURIPrefix+ent.Name(), f)
 		if err != nil {
 			return err
 		}
+		fmt.Printf("time to load %s, %v\n", ent.Name(), time.Since(start))
 	}
 	return nil
 }
