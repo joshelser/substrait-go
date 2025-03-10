@@ -13,10 +13,10 @@ import (
 	"time"
 
 	"github.com/creasty/defaults"
-	"github.com/goccy/go-yaml"
 	"github.com/substrait-io/substrait"
 	substraitgo "github.com/substrait-io/substrait-go/v3"
 	"github.com/substrait-io/substrait-go/v3/proto/extensions"
+	"gopkg.in/yaml.v3"
 )
 
 type AdvancedExtension = extensions.AdvancedExtension
