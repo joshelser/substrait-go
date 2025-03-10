@@ -196,11 +196,18 @@ func (c *Collection) Load(uri string, r io.Reader) error {
 
 	c.uriSet[uri] = void
 
-	var file SimpleExtensionFile
-	dec := yaml.NewDecoder(r)
-	if err := dec.Decode(&file); err != nil {
+	b, err := io.ReadAll(r)
+	if err != nil {
 		return err
 	}
+	now := time.Now()
+	var file SimpleExtensionFile
+	if err = yaml.Unmarshal(b, &file); err != nil {
+		//dec := yaml.NewDecoder(r)
+		//if err := dec.Decode(&file); err != nil {
+		return err
+	}
+	fmt.Printf("time to unmarshal %v\n", time.Since(now))
 
 	id := ID{URI: uri}
 	for _, t := range file.Types {
